@@ -3,6 +3,26 @@ Desenvolvido por Enzo Petersen
 
 Código de extrapolação e predição da viscosidade cinemática de óleos em diferentes temperaturas.
 """
+
+"""
+Equação de Puttagunta et al. (1992) and Aboul-Seoud and Moharam (1999) através da equação Walther (1931):
+ln[ln(v+0.8)]=a1+a2.ln(T)
+
+
+Equação derivada de MacCoull na ASTM-D341:
+loglog(Z)=A-B.log(T)
+Z=v+0.7+exp(-1.47-1.84.v-0.51.v^2)
+v=[Z-0.7]-exp(-0.7487-3.295[Z-0.7]+0.6119[z-0.7]^2-0.3193[Z-0.7]^3)
+
+
+Cálculo do índice da viscosidade pela ISO-2909:
+VI=[(L-U)/(L-H)] x 100
+Se a viscosidade cinemática do óleo em 100°C for acima de 70 mm2/s:
+L=0.835v^2+14.67v-216
+H=0.168v^2+11.85v-97
+Senão, L e H são tabelados.
+"""
+
 import math
 import numpy as np
 def viscosity(v1, T1, v2, T2):
@@ -28,7 +48,7 @@ def viscosity(v1, T1, v2, T2):
         vASTM[i] = Z[i] - 0.7 - math.exp(-0.7487 - 3.295*(Z[i] - 0.7) + 0.6119*((Z[i] - 0.7)**2) - 0.3193*((Z[i] - 0.7)**3))
         #print(vASTM[i])
     # Cálculo do índice de viscosidade através ISO 2909
-    L = 12.447  # Tabelado a partir da viscosidade cinemática em 100°C
+    L = 12.447  
     H = 9.8279
     VI = ((L-10)/(L-H))*100
     return (v, vASTM, VI)
